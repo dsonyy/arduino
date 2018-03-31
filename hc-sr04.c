@@ -1,7 +1,7 @@
 // 
 //  HC-SR04.c
 //  This program is created for testing Arduino R3 board 
-//  connected with HC-SR04 distance sensor.  
+//  connected with the HC-SR04 distance sensor.  
 //
 
 // Arduino pins
@@ -13,7 +13,7 @@ const float MaxDistance = 400;
 const float MinDistance = 2;
 const unsigned Measurements = 10;   
   
-//  Length of the ECHO_PIN signal multiplied by MagicValue returns distance
+//  Length of the ECHO_PIN signal multiplied by MagicValue returns a distance
 //  in centimeters
 const float MagicValue = 58;  
 
@@ -38,7 +38,9 @@ float get_distance()
     delayMicroseconds(10);
     digitalWrite(TRIG_PIN, LOW);
     
-    // gets the signal. The length of a signal means the distance If the signal is longer than Timeout, it must be invalid 
+    // Gets the signal. The length of a signal multiplied by MagicValue
+    // returns the distance in cm. 
+    // If the signal is longer than Timeout, it must be invalid. 
     distance = pulseIn(ECHO_PIN, HIGH, Timeout) / MagicValue;
     
     if (distance <= MaxDistance && distance >= MinDistance)
