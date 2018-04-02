@@ -28,22 +28,23 @@ float get_distance()
 {
   float distance;
   float average = 0;
+  int bad_distances = 0;
 
-  Serial.print("Meansurement: ");
-  for (int i = 0; i < Measurements; i++)
+  Serial.print("Measurement: ");
+  for (int i = 0; i < MEASUREMENTS; i++)
   {
-    digitalWrite(TRIG_PIN, LOW);
+    digitalWrite(SENSOR_TRIG_PIN, LOW);
     delayMicroseconds(5);
-    digitalWrite(TRIG_PIN, HIGH);
+    digitalWrite(SENSOR_TRIG_PIN, HIGH);
     delayMicroseconds(10);
-    digitalWrite(TRIG_PIN, LOW);
-    
+    digitalWrite(SENSOR_TRIG_PIN, LOW);
+
     // Gets the signal. The length of a signal multiplied by MagicValue
     // returns the distance in cm. 
     // If the signal is longer than Timeout, it must be invalid. 
-    distance = pulseIn(ECHO_PIN, HIGH, Timeout) / MagicValue;
+    distance = pulseIn(SENSOR_ECHO_PIN, HIGH, TIMEOUT) / MAGIC_VALUE;
     
-    if (distance <= MaxDistance && distance >= MinDistance)
+    if (distance <= MAX_DISTANCE && distance >= MIN_DISTANCE)
     {
       average += distance;
       Serial.print(distance); Serial.print(", ");
@@ -51,15 +52,19 @@ float get_distance()
     else
     {
       Serial.print("err, ");
+      if (++bad_distances == MEASUREMENTS >> 1) 
+      {
+        Serial.println("err [measurement terminated]");
+        return 0.0;
+      }
     }
   }
-  average /= Measurements;
+  average /= MEASUREMENTS;
   Serial.print("[");
   Serial.print(average);
   Serial.println("]");
   return average;
 }
-
 
 void setup() 
 {
