@@ -5,20 +5,20 @@
 //
 
 // Arduino pins
-#define ECHO_PIN 7
-#define TRIG_PIN 8
+#define SENSOR_ECHO_PIN 7
+#define SENSOR_TRIG_PIN 8
 #define LED_PIN  13
  
-const float MaxDistance = 400;
-const float MinDistance = 2;
-const unsigned Measurements = 10;   
+#define MAX_DISTANCE 400
+#define MIN_DISTANCE 2
+#define MEASUREMENTS 10   
   
 //  Length of the ECHO_PIN signal multiplied by MagicValue returns a distance
 //  in centimeters
-const float MagicValue = 58;  
+#define MAGIC_VALUE 58  
 
 //  It's the max length of ECHO_PIN signal that means the longest valid distance
-const float Timeout = MagicValue * MaxDistance;
+#define TIMEOUT (MAGIC_VALUE * MAX_DISTANCE)
 
 //  HC-SR04 sometimes returns weird and incorrect values so the function
 //  checks the distance `Measurements` times, excludes ones higher than 
@@ -71,8 +71,8 @@ void setup()
   Serial.begin(9600);
   Serial.println("Hello Arduino!");
   
-  pinMode(ECHO_PIN, INPUT);
-  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(SENSOR_ECHO_PIN, INPUT);
+  pinMode(SENSOR_TRIG_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
 
   Serial.println("Ready to work");
