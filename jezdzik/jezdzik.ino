@@ -21,6 +21,7 @@
 #define MEASUREMENTS 10   
 #define MAGIC_VALUE 58
 #define TIMEOUT (MAGIC_VALUE * MAX_DISTANCE)
+#define ROTATE_DISTANCE 20 // in cm
 
 // MOTORS
 #define LEFT_SPEED 190
@@ -51,7 +52,7 @@ void setup()
 // this function is so bad but works
 void loop()
 { 
-  if (get_distance() < 20)
+  if (get_distance() < ROTATE_DISTANCE)
   {
     int choice = rand() % 2;
     int rotations = 0;
@@ -76,11 +77,11 @@ void loop()
         continue;
       }
       delay(300);
-    } while (get_distance() < 20);
+    } while (get_distance() < ROTATE_DISTANCE);
   }
 
   
-  while (get_distance() >= 20)
+  while (get_distance() >= ROTATE_DISTANCE)
   {
     motor_left.run(FORWARD);  
     motor_right.run(FORWARD);
