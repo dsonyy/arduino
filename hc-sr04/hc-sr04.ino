@@ -5,13 +5,13 @@
 //
 
 // Arduino pins
-#define SENSOR_ECHO_PIN 7
-#define SENSOR_TRIG_PIN 8
+#define SENSOR_ECHO_PIN A0
+#define SENSOR_TRIG_PIN A1
 #define LED_PIN  13
  
 #define MAX_DISTANCE 400
 #define MIN_DISTANCE 2
-#define MEASUREMENTS 10   
+#define MEASUREMENTS 20
   
 //  Length of the ECHO_PIN signal multiplied by MagicValue returns a distance
 //  in centimeters
@@ -34,7 +34,7 @@ float get_distance()
   for (int i = 0; i < MEASUREMENTS; i++)
   {
     digitalWrite(SENSOR_TRIG_PIN, LOW);
-    delayMicroseconds(5);
+    delayMicroseconds(100);
     digitalWrite(SENSOR_TRIG_PIN, HIGH);
     delayMicroseconds(10);
     digitalWrite(SENSOR_TRIG_PIN, LOW);
@@ -43,21 +43,8 @@ float get_distance()
     // returns the distance in cm. 
     // If the signal is longer than Timeout, it must be invalid. 
     distance = pulseIn(SENSOR_ECHO_PIN, HIGH, TIMEOUT) / MAGIC_VALUE;
-    
-    if (distance <= MAX_DISTANCE && distance >= MIN_DISTANCE)
-    {
-      average += distance;
-      Serial.print(distance); Serial.print(", ");
-    }
-    else
-    {
-      Serial.print("err, ");
-      if (++bad_distances == MEASUREMENTS >> 1) 
-      {
-        Serial.println("err [measurement terminated]");
-        return 0.0;
-      }
-    }
+
+    average += distance;
   }
   average /= MEASUREMENTS;
   Serial.print("[");

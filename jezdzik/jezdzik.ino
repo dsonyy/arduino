@@ -8,7 +8,6 @@
 
 #include <AFMotor.h> 
 #include <stdlib.h>
-#include <time.h>
 
 // PINS
 #define SENSOR_ECHO_PIN A0
@@ -49,8 +48,7 @@ void setup()
   Serial.println("Ready to work.");
 }
 
-bool go = true;
-
+// this function is so bad but works
 void loop()
 { 
   if (get_distance() < 20)
@@ -66,18 +64,23 @@ void loop()
       }
       if (++rotations > 3)
       {
+        delay(200);
+        motor_left.run(RELEASE);  
+        motor_right.run(RELEASE);
+        delay(200);
+
         motor_left.run(FORWARD);  
         motor_right.run(FORWARD);
         delay(1000);
         rotations = 0;
         continue;
       }
-      delay(200);
+      delay(300);
     } while (get_distance() < 20);
   }
 
   
-  if (get_distance() >= 20)
+  while (get_distance() >= 20)
   {
     motor_left.run(FORWARD);  
     motor_right.run(FORWARD);
@@ -110,22 +113,17 @@ float get_distance()
     if (distance <= MAX_DISTANCE && distance >= MIN_DISTANCE)
     {
       average += distance;
-      Serial.print(distance); Serial.print(", ");
     }
     else
     {
-      Serial.print("err, ");
       if (++bad_distances == MEASUREMENTS >> 1) 
       {
-        Serial.println("err [measurement terminated]");
+        Serial.println("terminated");
         return 0.0;
       }
     }
   }
   average /= MEASUREMENTS;
-  Serial.print("[");
-  Serial.print(average);
-  Serial.println("]");
+  Serial.println(average);
   return average;
 }
- 
